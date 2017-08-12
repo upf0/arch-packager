@@ -22,4 +22,4 @@ RUN pacman-key -r 6690CF94 && \
 USER packager:packager
 WORKDIR /home/packager
 
-CMD ["/bin/sh", "-c", "sudo pacman -Sy --quiet --noprogressbar --noconfirm && makepkg -s --noconfirm --clean --cleanbuild --noprogressbar --force -m"]
+CMD ["/bin/sh", "-c", "sudo pacman -Sy --quiet --noconfirm && makepkg -s --noconfirm --clean --cleanbuild --force -m"]

@@ -2,7 +2,7 @@ FROM archimg/base-devel
 
 LABEL maintainer="UPF"
 
-ARG MIRROR_URL="https://mirror.nl.leaseweb.net/archlinux/$repo/os/$arch"
+ARG MIRROR_URL="https://mirror.nl.leaseweb.net/archlinux/\$repo/os/\$arch"
 ARG REPO_URL="http://upf.space"
 
 ENV PACKAGER="UPF Docker Container <vic@demuzere.be>"

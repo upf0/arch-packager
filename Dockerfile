@@ -4,15 +4,16 @@ LABEL maintainer="UPF"
 
 ARG MIRROR_URL="https://mirror.nl.leaseweb.net/archlinux/\$repo/os/\$arch"
 ARG REPO_URL="http://upf.space"
+ARG KEY_SERV="pgp.mit.edu"
 
 ENV PACKAGER="UPF Docker Container <vic@demuzere.be>"
 
 # We'll need access to UPF repository.
-RUN pacman-key -r 6690CF94 && \
+RUN pacman-key --keyserver "${KEY_SERV}" -r 6690CF94 && \
 	pacman-key --lsign 6690CF94 && \
-	pacman-key -r 455BE60E && \
+	pacman-key --keyserver "${KEY_SERV}" -r 455BE60E && \
 	pacman-key --lsign 455BE60E && \
-	pacman-key -r CF1F8674 && \
+	pacman-key --keyserver "${KEY_SERV}" -r CF1F8674 && \
 	pacman-key --lsign CF1F8674 && \
 	echo -e "\n[upf]\nSigLevel = PackageRequired\nServer = ${REPO_URL}/\$arch\n\n[upf-any]\nSigLevel = PackageRequired\nServer=${REPO_URL}/any" >> /etc/pacman.conf && \
 	echo "Server = ${MIRROR_URL}" > /etc/pacman.d/mirrorlist && \

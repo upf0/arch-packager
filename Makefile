@@ -1,4 +1,4 @@
-NAME := sorcix/arch-packager
+NAME := upf0/arch-packager
 
 build:
 	docker build -t $(NAME):latest --rm .

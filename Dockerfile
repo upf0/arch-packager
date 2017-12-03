@@ -4,7 +4,7 @@ LABEL maintainer="UPF"
 
 ARG MIRROR_URL="https://mirror.nl.leaseweb.net/archlinux/\$repo/os/\$arch"
 ARG REPO_URL="http://upf.space"
-ARG KEY_SERV="pgp.mit.edu"
+ARG KEY_SERV="hkps://hkps.pool.sks-keyservers.net"
 
 ENV PACKAGER="UPF Docker Container <vic@demuzere.be>"
 

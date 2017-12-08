@@ -20,7 +20,8 @@ RUN pacman-key --keyserver "${KEY_SERV}" -r 6690CF94 && \
 	echo -e "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n\n[upf]\nSigLevel = PackageRequired\nServer = ${REPO_URL}/\$arch\n\n[upf-any]\nSigLevel = PackageRequired\nServer=${REPO_URL}/any" >> /etc/pacman.conf && \
 	echo "Server = ${MIRROR_URL}" > /etc/pacman.d/mirrorlist && \
 	groupadd -g "${GROUP_ID}" packager && \
-	useradd -u "${USER_ID}" -g "${GROUP_ID}" -m packager
+	useradd -u "${USER_ID}" -g "${GROUP_ID}" -m packager && \
+	echo "packager ALL=(ALL) NOPASSWD: /usr/bin/pacman" > /etc/sudoers.d/packager
 
 WORKDIR /home/packager
 

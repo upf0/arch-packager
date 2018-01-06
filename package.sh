@@ -5,30 +5,32 @@ set -e
 USER_NAME="packager"
 GROUP_NAME="packager"
 
-# Change user id if necessary
 if [ "$(stat -c %u /home/packager)" != "${USER_ID}" ]; then
-	# Only change uid if it's not assigned yet, otherwise lookup user by id
+	echo "Ownership mismatch of your packaging directory. Exiting."
+	exit 1
+fi
+
+if [ "$(stat -c %g /home/packager)" != "${GROUP_ID}" ]; then
+	echo "Group ownership mismatch of your packaging directory. Exiting."
+	exit 2
+fi
+
+# Change uid or use other user if necessary
+if [ -n "${USER_ID}" ]; then
 	if [ ! "$(getent passwd "${USER_ID}")" ]; then
 		usermod -u "${USER_ID}" packager
 	else
 		USER_NAME=$(id -nu "${USER_ID}")
 	fi
-	chown "${USER_NAME}" /home/packager
-else
-	USER_NAME=$(id -nu "${USER_ID}")
 fi
 
-# Change group id if necessary
-if [ "$(stat -c %g /home/packager)" != "${GROUP_ID}" ]; then
-	# Only change gid if it's not assigned yet, otherwise lookup group by id
+# Change gid or use other gorup if necessary
+if [ -n "${GROUP_ID}" ]; then
 	if [ ! "$(getent group "${GROUP_ID}")" ]; then
 		groupmod -g "${GROUP_ID}" packager
 	else
 		GROUP_NAME=$(getent group "${GROUP_ID}"|cut -f1 -d':')
 	fi
-	chgrp "${GROUP_NAME}" /home/packager
-else
-	GROUP_NAME=$(getent group "${GROUP_ID}"|cut -f1 -d':')
 fi
 
 # Update package db

@@ -1,16 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 # Default user & group created in container
 USER_NAME="packager"
 GROUP_NAME="packager"
 
-if [ "$(stat -c %u /home/packager)" != "${USER_ID}" ]; then
+if [ "$(stat -c %u ${PKG_HOME})" != "${USER_ID}" ]; then
 	echo "Ownership mismatch of your packaging directory. Exiting."
 	exit 1
 fi
 
-if [ "$(stat -c %g /home/packager)" != "${GROUP_ID}" ]; then
+if [ "$(stat -c %g ${PKG_HOME})" != "${GROUP_ID}" ]; then
 	echo "Group ownership mismatch of your packaging directory. Exiting."
 	exit 2
 fi
@@ -36,5 +36,23 @@ fi
 # Update package db
 pacman -Sy --quiet --noconfirm
 
+# Run a command as our packager user
+function run_as_packager {
+	export HOME="${PKG_HOME}"
+	su "${USER_NAME}" -g "${GROUP_NAME}" -m -c "${1}"
+}
+
+# Import gpg keys when present
+PKG_BUILD="${PKG_HOME}/PKGBUILD"
+if [ -e "${PKG_BUILD}" ] && grep -q 'validpgpkeys=' "${PKG_BUILD}"; then
+	ORIG_IFS="${IFS}"
+	IFS=' ()' read -r -a GPG_KEYS <<< "$(grep 'validpgpkeys=' "${PKG_BUILD}" | awk -F"=" '{print $NF}')"
+	IFS="${ORIG_IFS}"
+	for key in "${GPG_KEYS[@]}"
+	do
+		run_as_packager "gpg --recv-keys ${key}"
+	done
+fi
+
 # Run package build as packager user
-su "${USER_NAME}" -g "${GROUP_NAME}" -m -c "makepkg -s --noconfirm --clean --cleanbuild --force -m"
+run_as_packager "makepkg -s --noconfirm --clean --cleanbuild --force -m"

@@ -8,7 +8,8 @@ ARG KEY_SERV="hkps://hkps.pool.sks-keyservers.net"
 
 ENV PACKAGER="UPF Docker Container <vic@demuzere.be>" \
 	USER_ID="1000" \
-	GROUP_ID="1000"
+	GROUP_ID="1000" \
+	PKG_HOME="/home/packager"
 
 # We'll need access to UPF repository.
 RUN pacman-key --keyserver "${KEY_SERV}" -r 6690CF94 && \
@@ -27,7 +28,7 @@ RUN pacman-key --keyserver "${KEY_SERV}" -r 6690CF94 && \
 	echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
 	echo "LC_COLLATE=C" >> /etc/locale.conf
 
-WORKDIR /home/packager
+WORKDIR $PKG_HOME
 
 COPY package.sh /opt
 

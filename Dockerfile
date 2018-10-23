@@ -21,7 +21,11 @@ RUN pacman-key --keyserver "${KEY_SERV}" -r 6690CF94 && \
 	echo "Server = ${MIRROR_URL}" > /etc/pacman.d/mirrorlist && \
 	groupadd -g "${GROUP_ID}" packager && \
 	useradd -u "${USER_ID}" -g "${GROUP_ID}" -m packager && \
-	echo "packager ALL=(ALL) NOPASSWD: /usr/bin/pacman" > /etc/sudoers.d/packager
+	echo "packager ALL=(ALL) NOPASSWD: /usr/bin/pacman" > /etc/sudoers.d/packager && \
+	sed -i "s/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/" /etc/locale.gen && \
+	locale-gen && \
+	echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
+	echo "LC_COLLATE=C" >> /etc/locale.conf
 
 WORKDIR /home/packager
 

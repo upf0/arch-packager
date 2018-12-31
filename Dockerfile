@@ -3,7 +3,7 @@ FROM archimg/base-devel
 LABEL maintainer="UPF"
 
 ARG MIRROR_QUERY_URL="https://www.archlinux.org/mirrorlist/?country=NL&country=DE&protocol=https&use_mirror_status=on"
-ARG REPO_URL="http://upf.space"
+ARG REPO_URL="https://upf.archlinux.be"
 ARG KEY_SERV="hkps://hkps.pool.sks-keyservers.net"
 
 ENV PACKAGER="UPF Docker Container <vic@demuzere.be>" \

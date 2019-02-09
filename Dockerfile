@@ -1,4 +1,4 @@
-FROM archimg/base-devel
+FROM archlinux/base
 
 LABEL maintainer="UPF"
 
@@ -12,7 +12,10 @@ ENV PACKAGER="UPF Docker Container <vic@demuzere.be>" \
 	PKG_HOME="/home/packager"
 
 # We'll need access to UPF repository.
-RUN pacman-key --keyserver "${KEY_SERV}" -r 6690CF94 && \
+RUN \
+	pacman-key --init && \
+	pacman-key --populate archlinux && \
+	pacman-key --keyserver "${KEY_SERV}" -r 6690CF94 && \
 	pacman-key --lsign 6690CF94 && \
 	pacman-key --keyserver "${KEY_SERV}" -r 455BE60E && \
 	pacman-key --lsign 455BE60E && \
@@ -22,6 +25,8 @@ RUN pacman-key --keyserver "${KEY_SERV}" -r 6690CF94 && \
 	curl -s "${MIRROR_QUERY_URL}" | sed -e 's/^#Server/Server/' -e '/^#/d' > /etc/pacman.d/mirrorlist && \
 	groupadd -g "${GROUP_ID}" packager && \
 	useradd -u "${USER_ID}" -g "${GROUP_ID}" -m packager && \
+	pacman --noconfirm -Syu --needed base-devel && \
+	rm -f /var/cache/pacman/pkg/* /var/lib/pacman/sync/* && \
 	echo "packager ALL=(ALL) NOPASSWD: /usr/bin/pacman" > /etc/sudoers.d/packager && \
 	sed -i "s/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/" /etc/locale.gen && \
 	locale-gen && \

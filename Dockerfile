@@ -33,6 +33,7 @@ RUN \
 	locale-gen && \
 	echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
 	echo "LC_COLLATE=C" >> /etc/locale.conf && \
+	sed -i "s/PKGEXT='.pkg.tar.zst'/PKGEXT='.pkg.tar.xz'/" /etc/makepkg.conf && \
 	rm -f /var/cache/pacman/pkg/* /var/lib/pacman/sync/*
 
 WORKDIR $PKG_HOME

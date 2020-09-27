@@ -2,12 +2,6 @@ FROM archlinux/base
 
 ARG MIRROR_QUERY_URL="https://www.archlinux.org/mirrorlist/?country=NL&country=DE&protocol=https&use_mirror_status=on"
 
-# Install all available updates & base-devel package group
-RUN \
-	curl -s "${MIRROR_QUERY_URL}" | sed -e 's/^#Server/Server/' -e '/^#/d' > /etc/pacman.d/mirrorlist && \
-	pacman --noconfirm -Syu --needed base-devel && \
-	rm -f /var/cache/pacman/pkg/* /var/lib/pacman/sync/*
-
 LABEL maintainer="UPF"
 
 ARG REPO_URL="https://upf.archlinux.be"
@@ -18,7 +12,7 @@ ENV PACKAGER="UPF Docker Container <vic@demuzere.be>" \
 	PKG_HOME="/home/packager" \
 	KEY_SERV="hkp://pool.sks-keyservers.net"
 
-# We'll need access to UPF repository.
+# Init the package db & trust gpg keys
 RUN \
 	pacman-key --init && \
 	pacman-key --populate archlinux && \
@@ -26,6 +20,16 @@ RUN \
 	pacman-key --lsign CF1F8674 && \
 	echo -e "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n\n[upf]\nSigLevel = PackageRequired\nServer = ${REPO_URL}/\$arch\n\n[upf-any]\nSigLevel = PackageRequired\nServer=${REPO_URL}/any" >> /etc/pacman.conf && \
 	pacman -Sy --noconfirm upf-keyring && \
+	rm -f /var/cache/pacman/pkg/* /var/lib/pacman/sync/*
+
+# Install all available updates & base-devel package group
+RUN \
+	curl -s "${MIRROR_QUERY_URL}" | sed -e 's/^#Server/Server/' -e '/^#/d' > /etc/pacman.d/mirrorlist && \
+	pacman --noconfirm -Syu --needed base-devel && \
+	rm -f /var/cache/pacman/pkg/* /var/lib/pacman/sync/*
+
+# Configure packaging environment
+RUN \
 	groupadd -g "${GROUP_ID}" packager && \
 	useradd -u "${USER_ID}" -g "${GROUP_ID}" -m packager && \
 	echo "packager ALL=(ALL) NOPASSWD: /usr/bin/pacman" > /etc/sudoers.d/packager && \
@@ -33,8 +37,7 @@ RUN \
 	locale-gen && \
 	echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
 	echo "LC_COLLATE=C" >> /etc/locale.conf && \
-	sed -i "s/PKGEXT='.pkg.tar.zst'/PKGEXT='.pkg.tar.xz'/" /etc/makepkg.conf && \
-	rm -f /var/cache/pacman/pkg/* /var/lib/pacman/sync/*
+	sed -i "s/PKGEXT='.pkg.tar.zst'/PKGEXT='.pkg.tar.xz'/" /etc/makepkg.conf
 
 WORKDIR $PKG_HOME
 

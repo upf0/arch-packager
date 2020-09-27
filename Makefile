@@ -14,5 +14,6 @@ push:
 release: update build push prune
 
 update:
+	git pull
 	$(CONTAINER_RUNTIME) pull $(DEPS)
 	$(CONTAINER_RUNTIME) pull $(NAME)

@@ -1,3 +1,4 @@
+REG := docker.io
 NAME := upf0/arch-packager
 DEPS := archlinux/base
 CONTAINER_RUNTIME := $(shell command -v podman 2> /dev/null || echo docker)
@@ -9,11 +10,14 @@ prune:
 	$(CONTAINER_RUNTIME) image prune
 
 push:
-	$(CONTAINER_RUNTIME) push $(NAME):latest
+ifeq ($(CONTAINER_RUNTIME),/usr/bin/podman)
+	$(CONTAINER_RUNTIME) tag localhost/$(NAME):latest $(REG)/$(NAME):latest
+endif
+	$(CONTAINER_RUNTIME) push $(REG)/$(NAME):latest
 
 release: update build push prune
 
 update:
 	git pull
-	$(CONTAINER_RUNTIME) pull $(DEPS)
-	$(CONTAINER_RUNTIME) pull $(NAME)
+	$(CONTAINER_RUNTIME) pull $(REG)/$(DEPS)
+	$(CONTAINER_RUNTIME) pull $(REG)/$(NAME)

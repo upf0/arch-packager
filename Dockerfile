@@ -11,12 +11,12 @@ RUN \
 LABEL maintainer="UPF"
 
 ARG REPO_URL="https://upf.archlinux.be"
-ARG KEY_SERV="hkp://pool.sks-keyservers.net"
 
 ENV PACKAGER="UPF Docker Container <vic@demuzere.be>" \
 	USER_ID="1000" \
 	GROUP_ID="1000" \
-	PKG_HOME="/home/packager"
+	PKG_HOME="/home/packager" \
+	KEY_SERV="hkp://pool.sks-keyservers.net"
 
 # We'll need access to UPF repository.
 RUN \

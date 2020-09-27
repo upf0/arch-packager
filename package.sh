@@ -50,7 +50,7 @@ if [ -e "${PKG_BUILD}" ] && grep -q 'validpgpkeys=' "${PKG_BUILD}"; then
 	IFS="${ORIG_IFS}"
 	for key in "${GPG_KEYS[@]}"
 	do
-		run_as_packager "gpg --recv-keys ${key}"
+		run_as_packager "gpg --keyserver ${KEY_SERV} --recv-keys ${key}"
 	done
 fi
 

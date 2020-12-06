@@ -1,4 +1,4 @@
-FROM archlinux/base
+FROM archlinux/archlinux:base-devel
 
 ARG MIRROR_QUERY_URL="https://www.archlinux.org/mirrorlist/?country=NL&country=DE&protocol=https&use_mirror_status=on"
 

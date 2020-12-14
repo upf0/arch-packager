@@ -7,7 +7,7 @@ build:
 	$(CONTAINER_RUNTIME) build -t $(NAME):latest --rm .
 
 prune:
-	$(CONTAINER_RUNTIME) image prune
+	$(CONTAINER_RUNTIME) image prune -f
 
 push:
 ifeq ($(CONTAINER_RUNTIME),/usr/bin/podman)

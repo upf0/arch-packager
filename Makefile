@@ -1,6 +1,6 @@
 REG := docker.io
 NAME := upf0/arch-packager
-DEPS := archlinux/base
+DEPS := archlinux/archlinux:base-devel
 CONTAINER_RUNTIME := $(shell command -v podman 2> /dev/null || echo docker)
 
 build:

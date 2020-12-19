@@ -24,7 +24,7 @@ RUN \
 
 # Install all available updates & base-devel package group
 RUN \
-	curl -s "${MIRROR_QUERY_URL}" | sed -e 's/^#Server/Server/' -e '/^#/d' > /etc/pacman.d/mirrorlist && \
+	curl -Ls "${MIRROR_QUERY_URL}" | sed -e 's/^#Server/Server/' -e '/^#/d' > /etc/pacman.d/mirrorlist && \
 	pacman --noconfirm -Syu --needed base-devel && \
 	rm -f /var/cache/pacman/pkg/* /var/lib/pacman/sync/*
 

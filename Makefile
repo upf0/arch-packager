@@ -4,7 +4,7 @@ DEPS := archlinux/archlinux:base-devel
 CONTAINER_RUNTIME := $(shell command -v podman 2> /dev/null || echo docker)
 
 build:
-	$(CONTAINER_RUNTIME) build -t $(NAME):latest --rm .
+	$(CONTAINER_RUNTIME) build -t $(NAME):latest --rm --no-cache .
 
 prune:
 	$(CONTAINER_RUNTIME) image prune -f

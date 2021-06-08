@@ -4,7 +4,7 @@ DEPS := archlinux/archlinux:base-devel
 CONTAINER_RUNTIME := $(shell command -v podman 2> /dev/null || echo docker)
 
 build:
-	$(CONTAINER_RUNTIME) build -t $(NAME):latest --rm --no-cache .
+	buildah bud -t upf0/arch-packager .
 
 prune:
 	$(CONTAINER_RUNTIME) image prune -f
@@ -18,6 +18,5 @@ endif
 release: update build push prune
 
 update:
-	git pull
 	$(CONTAINER_RUNTIME) pull $(REG)/$(DEPS)
 	$(CONTAINER_RUNTIME) pull $(REG)/$(NAME)

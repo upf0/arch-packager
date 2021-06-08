@@ -16,7 +16,7 @@ ENV PACKAGER="UPF Docker Container <vic@demuzere.be>" \
 RUN \
 	pacman-key --init && \
 	pacman-key --populate archlinux && \
-	pacman-key --keyserver "${KEY_SERV}" -r CF1F8674 && \
+	pacman-key --keyserver "${KEY_SERV}" -r 560D6ECFDAC7134E51B1A127161C09A6CF1F8674 && \
 	pacman-key --lsign CF1F8674 && \
 	echo -e "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n\n[upf]\nSigLevel = PackageRequired\nServer = ${REPO_URL}/\$arch\n\n[upf-any]\nSigLevel = PackageRequired\nServer=${REPO_URL}/any" >> /etc/pacman.conf && \
 	pacman -Sy --noconfirm upf-keyring && \

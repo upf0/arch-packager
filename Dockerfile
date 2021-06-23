@@ -10,7 +10,7 @@ ENV PACKAGER="UPF Docker Container <vic@demuzere.be>" \
 	USER_ID="1000" \
 	GROUP_ID="1000" \
 	PKG_HOME="/home/packager" \
-	KEY_SERV="hkp://pool.sks-keyservers.net"
+	KEY_SERV="hkps://keys.openpgp.org"
 
 # Init the package db & trust gpg keys
 RUN \

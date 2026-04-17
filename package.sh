@@ -39,7 +39,7 @@ pacman -Sy --quiet --noconfirm
 # Run a command as our packager user
 function run_as_packager {
 	export HOME="${PKG_HOME}"
-	su "${USER_NAME}" -g "${GROUP_NAME}" -m -c "${1}"
+	su -g "${GROUP_NAME}" -m -c "${1}" "${USER_NAME}"
 }
 
 # Import gpg keys when present
